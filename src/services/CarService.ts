@@ -1,4 +1,4 @@
-import { Car, car } from '../interfaces/CarInterface';
+import { Car } from '../interfaces/CarInterface';
 import Service, { ServiceError } from './AbstractService';
 import CarModel from '../models/CarModel';
 
@@ -8,11 +8,6 @@ export default class CarService extends Service<Car> {
   }
 
   public async create(data: Car): Promise<Car | ServiceError> {
-    const parsed = car.safeParse(data);
-    if (!parsed.success) {
-      return { error: parsed.error };
-    }
-
     const created = await this.model.create(data);
     return created;
   }
@@ -31,11 +26,6 @@ export default class CarService extends Service<Car> {
     id: string,
     data: Car,
   ): Promise<Car | null | ServiceError> {
-    const parsed = car.safeParse(data);
-    if (!parsed.success) {
-      return { error: parsed.error };
-    }
-
     const updated = await this.model.update(id, data);
     return updated;
   }
