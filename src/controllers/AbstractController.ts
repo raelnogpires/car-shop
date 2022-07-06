@@ -29,6 +29,10 @@ abstract class Controller<T> {
   ): Promise<typeof res> => {
     try {
       const created = await this.service.create(req.body);
+      if ('error' in created) {
+        return res.status(400).json(created);
+      }
+
       return res.status(201).json(created);
     } catch (error) {
       return res.status(500).json({ error: this.errors.internal });
