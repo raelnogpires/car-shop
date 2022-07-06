@@ -1,12 +1,12 @@
 import { ZodError } from 'zod';
 import { Model } from '../interfaces/ModelInterface';
 
-interface ServiceError {
+export interface ServiceError {
   error: ZodError;
 }
 
 export default class Service<T> {
-  constructor(private model: Model<T>) {}
+  constructor(public model: Model<T>) {}
 
   public async create(data: T): Promise<T | ServiceError> {
     const created = await this.model.create(data);
