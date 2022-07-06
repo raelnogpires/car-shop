@@ -5,15 +5,35 @@ export interface RequestWithBody<T> extends Request {
   body: T;
 }
 
+enum ControllerErrors {
+  internal = 'Internal Server Error',
+  notFound = 'Object not found',
+  requiredId = 'Id is required',
+  badRequest = 'Bad request',
+}
+
+export type ResponseError = {
+  error: unknown;
+};
+
 abstract class Controller<T> {
   abstract route: string;
 
+  protected errors = ControllerErrors;
+
   constructor(protected service: Service<T>) { }
 
-  abstract create(
+  create = async (
     req: RequestWithBody<T>,
-    res: Response,
-  ): Promise<typeof res>;
+    res: Response<T | ResponseError>,
+  ): Promise<typeof res> => {
+    try {
+      const created = await this.service.create(req.body);
+      return res.status(201).json(created);
+    } catch (error) {
+      return res.status(500).json({ error: this.errors.internal });
+    }
+  };
 }
 
 export default Controller;
