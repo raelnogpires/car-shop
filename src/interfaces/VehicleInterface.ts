@@ -9,3 +9,4 @@ const vehicleInterface = z.object({
 });
 
 export type Vehicle = z.infer<typeof vehicleInterface>;
+export { vehicleInterface };
