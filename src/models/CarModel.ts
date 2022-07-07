@@ -15,7 +15,7 @@ const carSchema = new Schema<CarDocument>({
   seatsQty: Number,
 });
 
-export default class CarModel extends MongooseModel<CarDocument> {
+export default class CarModel extends MongooseModel<Car> {
   constructor(model = createModel('cars', carSchema)) {
     super(model);
   }
