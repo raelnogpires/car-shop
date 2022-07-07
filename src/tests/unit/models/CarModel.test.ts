@@ -4,7 +4,7 @@ import moongose from 'mongoose';
 
 import CarModel from '../../../models/CarModel';
 
-import { createCarMock } from '../../mocks/car.mock';
+import { carMock } from '../../mocks/car.mock';
 
 describe('01 - Tests CarModel', () => {
   let modelStub: SinonStub;
@@ -12,7 +12,7 @@ describe('01 - Tests CarModel', () => {
   describe('CarModel.create', () => {
     before(() => {
       modelStub = sinon.stub(moongose.Model, 'create')
-      .resolves(createCarMock);
+      .resolves(carMock);
     });
 
     after(() => {
@@ -21,8 +21,8 @@ describe('01 - Tests CarModel', () => {
 
     it('Success', async () => {
       const model = new CarModel();
-      const created = await model.create(createCarMock);
-      expect(created).to.be.deep.equal(createCarMock);
+      const created = await model.create(carMock);
+      expect(created).to.be.deep.equal(carMock);
     });
   });
 });

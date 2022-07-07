@@ -1,6 +1,6 @@
 import { Car } from "../../interfaces/CarInterface";
 
-export const createCarMock: Car = {
+export const carMock: Car = {
   model: 'Ferrari Maranello',
   year: 1963,
   color: 'red',
