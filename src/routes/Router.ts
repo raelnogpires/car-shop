@@ -11,9 +11,11 @@ class CustomRouter<T> {
   public addRoute(
     controller: AbstractController<T>,
     route: string = controller.route,
+    routeId = `${route}/:id`,
   ) {
     this.router.post(route, controller.create);
     this.router.get(route, controller.read);
+    this.router.get(routeId, controller.readOne);
   }
 }
 

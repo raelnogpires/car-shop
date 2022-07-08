@@ -44,8 +44,30 @@ abstract class Controller<T> {
     res: Response,
   ): Promise<Response> => {
     try {
-      const cars = await this.service.read();
-      return res.status(200).json(cars);
+      const results = await this.service.read();
+      return res.status(200).json(results);
+    } catch (error) {
+      return res.status(500).json({ error: this.errors.internal });
+    }
+  };
+
+  readOne = async (
+    req: Request,
+    res: Response,
+  ): Promise<Response> => {
+    try {
+      const { id } = req.params;
+      const result = await this.service.readOne(id);
+      if (!result) {
+        return res.status(404).json({ error: 'Object not found' });
+      }
+
+      if ('error' in result) {
+        const err = result.error.issues[0].message;
+        return res.status(400).json({ error: err });
+      }
+
+      return res.status(200).json(result);
     } catch (error) {
       return res.status(500).json({ error: this.errors.internal });
     }
