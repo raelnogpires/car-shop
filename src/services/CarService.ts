@@ -50,7 +50,14 @@ export default class CarService extends Service<Car> {
       return { error: parsed.error };
     }
 
+    const isIdValid = idValidation.safeParse(id);
+    if (!isIdValid.success) {
+      return { error: isIdValid.error };
+    }
+
     const updated = await this.model.update(id, data);
+    if (!updated) return null;
+
     return updated;
   }
 
