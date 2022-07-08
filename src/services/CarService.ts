@@ -62,7 +62,14 @@ export default class CarService extends Service<Car> {
   }
 
   public async delete(id: string): Promise<Car | null | ServiceError> {
+    const isIdValid = idValidation.safeParse(id);
+    if (!isIdValid.success) {
+      return { error: isIdValid.error };
+    }
+
     const deleted = await this.model.delete(id);
+    if (!deleted) return null;
+
     return deleted;
   }
 }
