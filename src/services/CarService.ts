@@ -1,6 +1,13 @@
+import { z } from 'zod';
+
 import { Car, car } from '../interfaces/CarInterface';
 import Service, { ServiceError } from './AbstractService';
 import CarModel from '../models/CarModel';
+
+const idValidation = z.string().length(
+  24,
+  { message: 'Id must have 24 hexadecimal characters' },
+);
 
 export default class CarService extends Service<Car> {
   constructor(model = new CarModel()) {
@@ -23,7 +30,14 @@ export default class CarService extends Service<Car> {
   }
 
   public async readOne(id: string): Promise<Car | null | ServiceError> {
+    const isIdValid = idValidation.safeParse(id);
+    if (!isIdValid.success) {
+      return { error: isIdValid.error };
+    }
+
     const result = await this.model.readOne(id);
+    if (!result) return null;
+
     return result;
   }
 
