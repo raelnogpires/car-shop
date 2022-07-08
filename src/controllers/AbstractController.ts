@@ -59,7 +59,7 @@ abstract class Controller<T> {
       const { id } = req.params;
       const result = await this.service.readOne(id);
       if (!result) {
-        return res.status(404).json({ error: 'Object not found' });
+        return res.status(404).json({ error: this.errors.notFound });
       }
 
       if ('error' in result) {
@@ -73,16 +73,27 @@ abstract class Controller<T> {
     }
   };
 
-  // update = async (
-  //   req: RequestWithBody<T>,
-  //   res: Response,
-  // ): Promise<Response> => {
-  //   try {
-      
-  //   } catch (error) {
-  //     return res.status(500).json({ error: this.errors.internal });
-  //   }
-  // };
+  update = async (
+    req: RequestWithBody<T>,
+    res: Response,
+  ): Promise<Response> => {
+    try {
+      const { id } = req.params;
+      const result = await this.service.update(id, req.body);
+      if (!result) {
+        return res.status(404).json({ error: this.errors.notFound });
+      }
+
+      if ('error' in result) {
+        const err = result.error.issues[0].message;
+        return res.status(400).json({ error: err });
+      }
+
+      return res.status(200).json(result);
+    } catch (error) {
+      return res.status(500).json({ error: this.errors.internal });
+    }
+  };
 }
 
 export default Controller;
