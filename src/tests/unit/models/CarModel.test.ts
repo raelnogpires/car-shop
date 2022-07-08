@@ -1,15 +1,15 @@
 import { expect } from 'chai';
 import sinon, { SinonStub } from 'sinon';
-import moongose from 'mongoose';
+import moongose, { models } from 'mongoose';
 
 import CarModel from '../../../models/CarModel';
 
-import { carMock } from '../../mocks/car.mock';
+import { carMock, hexadecimalId } from '../../mocks/car.mock';
 
 describe('01 - Tests CarModel', () => {
   let modelStub: SinonStub;
 
-  describe('CarModel.create', () => {
+  describe('a. CarModel.create', () => {
     before(() => {
       modelStub = sinon.stub(moongose.Model, 'create')
         .resolves(carMock);
@@ -26,8 +26,8 @@ describe('01 - Tests CarModel', () => {
     });
   });
 
-  describe('CarModel.read', () => {
-    describe('When', () => {
+  describe('b. CarModel.read', () => {
+    describe('When cars are registered in DB', () => {
       before(() => {
         modelStub = sinon.stub(moongose.Model, 'find')
           .resolves([carMock]);
@@ -37,14 +37,14 @@ describe('01 - Tests CarModel', () => {
         modelStub.restore();
       });
   
-      it('Cars are registered in DB', async () => {
+      it('Returns array of cars', async () => {
         const model = new CarModel();
         const cars = await model.read();
         expect(cars).to.deep.equal([carMock]);
       });
     });
 
-    describe('When', () => {
+    describe('When no cars registered in DB', () => {
       before(() => {
         modelStub = sinon.stub(moongose.Model, 'find')
           .resolves([]);
@@ -54,10 +54,46 @@ describe('01 - Tests CarModel', () => {
         modelStub.restore();
       });
   
-      it('No cars registered in DB', async () => {
+      it('Returns empty array', async () => {
         const model = new CarModel();
         const cars = await model.read();
         expect(cars).to.deep.equal([]);
+      });
+    });
+  });
+
+  describe('c. CarModel.readOne', () => {
+    describe('When car exists', () => {
+      before(() => {
+        modelStub = sinon.stub(moongose.Model, 'findOne')
+          .resolves(carMock);
+      });
+
+      after(() => {
+        modelStub.restore();
+      });
+
+      it('Returns car object', async () => {
+        const model = new CarModel();
+        const car = await model.readOne(hexadecimalId);
+        expect(car).to.deep.equal(carMock);
+      });
+    });
+
+    describe(`When car's not found`, () => {
+      before(() => {
+        modelStub = sinon.stub(moongose.Model, 'findOne')
+          .resolves(null);
+      });
+
+      after(() => {
+        modelStub.restore();
+      });
+
+      it('Returns null', async () => {
+        const model = new CarModel();
+        const car = await model.readOne(hexadecimalId);
+        expect(car).to.deep.equal(null);
       });
     });
   });

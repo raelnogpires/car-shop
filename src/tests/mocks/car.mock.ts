@@ -8,3 +8,5 @@ export const carMock: Car = {
   seatsQty: 2,
   doorsQty: 2
 };
+
+export const hexadecimalId = '507f191e810c19729de860ea';
