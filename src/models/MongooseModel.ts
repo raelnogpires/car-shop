@@ -21,7 +21,7 @@ abstract class MongooseModel<T> implements Model<T> {
 
   update = async (id: string, data: T): Promise<T | null> => {
     const updated = await this.model
-      .findByIdAndUpdate(id, { data }, { new: true });
+      .findOneAndUpdate({ _id: id }, data, { new: true });
     return updated;
   };
 

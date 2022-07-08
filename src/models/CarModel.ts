@@ -13,7 +13,7 @@ const carSchema = new Schema<CarDocument>({
   buyValue: Number,
   doorsQty: Number,
   seatsQty: Number,
-});
+}, { versionKey: false });
 
 export default class CarModel extends MongooseModel<Car> {
   constructor(model = createModel('cars', carSchema)) {
