@@ -97,4 +97,76 @@ describe('01 - Tests CarModel', () => {
       });
     });
   });
+
+  describe('d. CarModel.update', () => {
+    describe('When car exists', () => {
+      before(() => {
+        modelStub = sinon.stub(moongose.Model, 'findOneAndUpdate')
+          .resolves(carMock);
+      });
+
+      after(() => {
+        modelStub.restore();
+      });
+
+      it('Returns updated car', async () => {
+        const model = new CarModel();
+        const car = await model.update(hexadecimalId, carMock);
+        expect(car).to.deep.equal(carMock);
+      });
+    });
+
+    describe(`When car's not found`, () => {
+      before(() => {
+        modelStub = sinon.stub(moongose.Model, 'findOneAndUpdate')
+          .resolves(null);
+      });
+
+      after(() => {
+        modelStub.restore();
+      });
+
+      it('Returns null', async () => {
+        const model = new CarModel();
+        const car = await model.update(hexadecimalId, carMock);
+        expect(car).to.deep.equal(null);
+      });
+    });
+
+    describe('e. CarModel.delete', () => {
+      describe('When car exists', () => {
+        before(() => {
+          modelStub = sinon.stub(moongose.Model, 'findByIdAndDelete')
+            .resolves(carMock);
+        });
+
+        after(() => {
+          modelStub.restore();
+        });
+
+        it('Returns deleted car', async () => {
+          const model = new CarModel();
+          const car = await model.delete(hexadecimalId);
+          expect(car).to.deep.equal(carMock);
+        });
+      });
+
+      describe(`When car's not found`, () => {
+        before(() => {
+          modelStub = sinon.stub(moongose.Model, 'findByIdAndDelete')
+            .resolves(null);
+        });
+
+        after(() => {
+          modelStub.restore();
+        });
+
+        it('Returns deleted car', async () => {
+          const model = new CarModel();
+          const car = await model.delete(hexadecimalId);
+          expect(car).to.deep.equal(null);
+        });
+      });
+    });
+  });
 });
