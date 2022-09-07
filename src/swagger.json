@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Car Shop API",
+    "description": "Documentation for the Car Shop API",
+    "contact": {
+      "name": "Rael Nogueira Pires",
+      "email": "rnogpiresfinancial@gmail.com"
+    },
+    "server": {
+      "url": "http://localhost:3001"
+    }
+  }
+}
