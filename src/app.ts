@@ -1,5 +1,8 @@
 import express, { Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+
 import connectToDatabase from './connection';
+import docs from './swagger.json';
 
 class App {
   public app: express.Application;
@@ -18,6 +21,7 @@ class App {
   }
 
   public addRouter(router: Router) {
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(docs));
     this.app.use(router);
   }
 
